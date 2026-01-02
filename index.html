@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            padding: 20px;
+        }
+        
+        .dashboard {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid #333;
+        }
+        
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .dashboard-title h1 {
+            font-size: 24px;
+            margin-bottom: 6px;
+            color: #00d4ff;
+            text-transform: uppercase;
+        }
+        
+        .dashboard-title p {
+            color: #888;
+            font-size: 13px;
+            font-weight: 400;
+        }
+        
+        .quick-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #00d4ff;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            font-weight: 400;
+        }
+        
+        .decisions-needed {
+            background: linear-gradient(135deg, #2a1a1a 0%, #1a0f0f 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 2px solid #ef4444;
+            animation: pulse-red 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-red {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+                border-color: #ef4444;
+            }
+            50% { 
+                box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
+                border-color: #ff5555;
+            }
+        }
+        
+        .decisions-needed h2 {
+            color: #ef4444;
+            margin-bottom: 25px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .decisions-needed h2::before {
+            content: '🔴';
+            font-size: 28px;
+        }
+        
+        .urgent-badge {
+            background: #ef4444;
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+        
+        .decision-item {
+            background: #252525;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .decision-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .decision-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .decision-company {
+            font-weight: 700;
+            color: #fff;
+            font-size: 18px;
+        }
+        
+        .decision-deadline {
+            background: #ef4444;
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .decision-text {
+            color: #ccc;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .ceo-view {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid #333;
+        }
+        
+        .ceo-view h2 {
+            color: #00d4ff;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        
+        .ceo-view h2::before {
+            content: '👨‍💼';
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            font-weight: 400;
+            margin-bottom: 15px;
+        }
+        
+        .company-status-list {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .company-status {
+            background: #252525;
+            padding: 20px 25px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid;
+            gap: 20px;
+        }
+        
+        .company-status.green {
+            border-color: #4ade80;
+        }
+        
+        .company-status.yellow {
+            border-color: #fbbf24;
+        }
+        
+        .company-status.orange {
+            border-color: #f59e0b;
+        }
+        
+        .company-status.red {
+            border-color: #ef4444;
+        }
+        
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+        
+        .status-icon {
+            font-size: 28px;
+            line-height: 1;
+        }
+        
+        .company-name {
+            font-weight: 600;
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        .company-note {
+            font-size: 13px;
+            color: #888;
+            margin-top: 3px;
+        }
+        
+        .status-badge {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 20px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .status-badge.green {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+        
+        .status-badge.gray {
+            color: #888;
+            background: rgba(136, 136, 136, 0.1);
+        }
+        
+        .status-badge.orange {
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        
+        .status-badge.red {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+        
+        .portfolio-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+        
+        .portfolio-card.expanded {
+            border-color: #00d4ff;
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.2);
+        }
+        
+        .portfolio-card h3 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .portfolio-card h3::before {
+            content: '📈';
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        
+        .view-details-btn {
+            font-size: 13px;
+            color: #fff;
+            background: #00d4ff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .view-details-btn:hover {
+            background: #00b8e6;
+            transform: scale(1.05);
+        }
+        
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #252525;
+        }
+        
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            color: #888;
+            font-size: 13px;
+        }
+        
+        .metric-value {
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .metric-value.positive {
+            color: #4ade80;
+        }
+        
+        .metric-value.negative {
+            color: #ef4444;
+        }
+        
+        .detailed-metrics {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+        }
+        
+        .detailed-metrics.show {
+            max-height: 800px;
+            opacity: 1;
+            margin-top: 20px;
+        }
+        
+        .company-breakdown {
+            background: #252525;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .company-breakdown:last-child {
+            margin-bottom: 0;
+        }
+        
+        .company-breakdown h4 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #1e1e1e;
+            border-radius: 6px;
+        }
+        
+        .breakdown-label {
+            color: #888;
+            font-size: 13px;
+        }
+        
+        .breakdown-value {
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+            text-align: right;
+            white-space: nowrap;
+        }
+        
+        .time-allocation {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+        }
+        
+        .time-allocation h3 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .time-allocation h3::before {
+            content: '⏱️';
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        
+        .time-explanation {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .time-bar {
+            margin-bottom: 15px;
+        }
+        
+        .time-bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .time-bar-company {
+            color: #ccc;
+            font-size: 13px;
+        }
+        
+        .time-bar-hours {
+            color: #00d4ff;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .time-bar-visual {
+            height: 8px;
+            background: #252525;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .time-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff 0%, #0099ff 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 1200px) {
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-stats {
+                gap: 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .quick-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="dashboard-header">
+            <div class="dashboard-title">
+                <h1>🎯 PORTFOLIO COMMAND CENTER</h1>
+                <p>Last updated: January 1, 2026 at 6:00 PM</p>
+            </div>
+            <div class="quick-stats">
+                <div class="stat">
+                    <span class="stat-value">5</span>
+                    <span class="stat-label">Total Ventures</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">2</span>
+                    <span class="stat-label">Decisions Needed</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">40h</span>
+                    <span class="stat-label">This Week</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="decisions-needed">
+            <h2>URGENT DECISIONS</h2>
+            
+            <div class="decision-item">
+                <div class="decision-header">
+                    <span class="decision-company">Rexi Group</span>
+                    <span class="decision-deadline">By Friday</span>
+                </div>
+                <div class="decision-text">Approve $75K additional marketing spend for Q1 campaign. Options: A) Full approval, B) $50K partial, C) Defer to Q2</div>
+            </div>
+            
+            <div class="decision-item">
+                <div class="decision-header">
+                    <span class="decision-company">Pet Life Project</span>
+                    <span class="decision-deadline">By Monday</span>
+                </div>
+                <div class="decision-text">Review $150K funding proposal for veterinary partnership program. Board vote required</div>
+            </div>
+        </div>
+        
+        <div class="ceo-view">
+            <h2>CEO VIEW</h2>
+            
+            <div class="section">
+                <div class="section-title">OPERATING COMPANIES (Weekly Focus)</div>
+                <div class="company-status-list">
+                    <div class="company-status orange">
+                        <div class="company-info">
+                            <div class="status-icon">🟠</div>
+                            <div>
+                                <div class="company-name">Rexi Ventures</div>
+                                <div class="company-note">Payment delays: 2 clients paying 15+ days late</div>
+                            </div>
+                        </div>
+                        <div class="status-badge orange">WATCH IT</div>
+                    </div>
+                    
+                    <div class="company-status red">
+                        <div class="company-info">
+                            <div class="status-icon">🔴</div>
+                            <div>
+                                <div class="company-name">Rexi Group</div>
+                                <div class="company-note">Decision needed: Marketing spend approval</div>
+                            </div>
+                        </div>
+                        <div class="status-badge red">ACTION</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">STRATEGIC PORTFOLIO (Monthly Check)</div>
+                <div class="company-status-list">
+                    <div class="company-status green">
+                        <div class="company-info">
+                            <div class="status-icon">🟢</div>
+                            <div class="company-name">Glovanta Trade</div>
+                        </div>
+                        <div class="status-badge gray">On Track</div>
+                    </div>
+                    
+                    <div class="company-status green">
+                        <div class="company-info">
+                            <div class="status-icon">🟢</div>
+                            <div class="company-name">Rose Garden Advisors</div>
+                        </div>
+                        <div class="status-badge gray">On Track</div>
+                    </div>
+                    
+                    <div class="company-status red">
+                        <div class="company-info">
+                            <div class="status-icon">🔴</div>
+                            <div>
+                                <div class="company-name">Pet Life Project</div>
+                                <div class="company-note">Funding proposal pending review</div>
+                            </div>
+                        </div>
+                        <div class="status-badge red">ACTION</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="portfolio-grid">
+            <div class="portfolio-card" id="metricsCard">
+                <h3>
+                    PORTFOLIO METRICS AT-A-GLANCE
+                    <button class="view-details-btn" id="toggleBtn" onclick="toggleDetails()">View Details</button>
+                </h3>
+                <div class="metric-row">
+                    <span class="metric-label">Total Capital Deployed</span>
+                    <span class="metric-value">$10.2M</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Combined Team Size</span>
+                    <span class="metric-value">127 people</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Active Hiring Pipeline</span>
+                    <span class="metric-value">14 roles</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Avg. Monthly Burn</span>
+                    <span class="metric-value">$425K</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Combined Runway</span>
+                    <span class="metric-value positive">18 months</span>
+                </div>
+                
+                <div id="detailedMetrics" class="detailed-metrics">
+                    <div class="company-breakdown">
+                        <h4>Rexi Ventures</h4>
+                        <div class="breakdown-grid">
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Capital</span>
+                                <span class="breakdown-value">$3.5M</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Team</span>
+                                <span class="breakdown-value">45 people</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Burn</span>
+                                <span class="breakdown-value">$180K/mo</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Runway</span>
+                                <span class="breakdown-value" style="color: #4ade80;">19 months</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="company-breakdown">
+                        <h4>Rexi Group</h4>
+                        <div class="breakdown-grid">
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Capital</span>
+                                <span class="breakdown-value">$4.2M</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Team</span>
+                                <span class="breakdown-value">52 people</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Burn</span>
+                                <span class="breakdown-value">$195K/mo</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Runway</span>
+                                <span class="breakdown-value" style="color: #fbbf24;">21 months</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="company-breakdown">
+                        <h4>Strategic Portfolio (Combined)</h4>
+                        <div class="breakdown-grid">
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Capital</span>
+                                <span class="breakdown-value">$2.5M</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Team</span>
+                                <span class="breakdown-value">30 people</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Burn</span>
+                                <span class="breakdown-value">$50K/mo</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Hiring</span>
+                                <span class="breakdown-value">3 open roles</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="time-allocation">
+                <h3>TIME ALLOCATION THIS WEEK</h3>
+                <div class="time-explanation">Based on calendar blocks + priorities set by you</div>
+                
+                <div class="time-bar">
+                    <div class="time-bar-label">
+                        <span class="time-bar-company">Rexi Ventures</span>
+                        <span class="time-bar-hours">15 hours</span>
+                    </div>
+                    <div class="time-bar-visual">
+                        <div class="time-bar-fill" style="width: 37.5%;"></div>
+                    </div>
+                </div>
+                
+                <div class="time-bar">
+                    <div class="time-bar-label">
+                        <span class="time-bar-company">Rexi Group</span>
+                        <span class="time-bar-hours">20 hours</span>
+                    </div>
+                    <div class="time-bar-visual">
+                        <div class="time-bar-fill" style="width: 50%;"></div>
+                    </div>
+                </div>
+                
+                <div class="time-bar">
+                    <div class="time-bar-label">
+                        <span class="time-bar-company">Strategic Roles</span>
+                        <span class="time-bar-hours">5 hours</span>
+                    </div>
+                    <div class="time-bar-visual">
+                        <div class="time-bar-fill" style="width: 12.5%;"></div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #252525;">
+                    <div class="time-bar-label">
+                        <span class="time-bar-company" style="font-weight: 600;">Total</span>
+                        <span class="time-bar-hours" style="font-size: 18px;">40 hours</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleDetails() {
+            const detailedMetrics = document.getElementById('detailedMetrics');
+            const toggleBtn = document.getElementById('toggleBtn');
+            const metricsCard = document.getElementById('metricsCard');
+            
+            if (detailedMetrics.classList.contains('show')) {
+                detailedMetrics.classList.remove('show');
+                toggleBtn.textContent = 'View Details';
+                metricsCard.classList.remove('expanded');
+            } else {
+                detailedMetrics.classList.add('show');
+                toggleBtn.textContent = 'Hide Details';
+                metricsCard.classList.add('expanded');
+            }
+        }
+    </script>
+</body>
+</html>
